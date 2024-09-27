@@ -3,6 +3,8 @@ require('dotenv').config()
 const mailsvc = require("../../services/mail.service");
 const bcrypt = require("bcryptjs");
 const { randomstring } = require("../../utilities/helper");
+const Usermodel=require('./user.module')
+
 class userService {
   transformUserCreate = (req) => {
     //data required for usercreation
@@ -64,6 +66,29 @@ class userService {
       throw exception;
     }
   };
+
+  registerUser=async(data)=>{
+    try{
+      
+     const user= new Usermodel(data);
+     return await user.save()//predefined function
+     
+    }catch(exception){
+      // console.log(exception);
+      
+      let msg={}
+      if (exception.code===11000){
+        const uniqueFailedKeys= Object.keys(exception.keyPattern)//return array->['email']
+        
+        uniqueFailedKeys.map((field)=>{
+          msg[field]=field + " should be unique"
+        })
+      }
+
+      console.log("error while registering user in DB.");      
+      throw {status:400, details:msg, message:"validation error"};
+    }
+  }
 }
 
 const usersvc = new userService();

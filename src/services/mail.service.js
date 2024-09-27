@@ -1,20 +1,25 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+
 class mailservice {
   #transport; //private key,only used in this class
   constructor() {
     try {
       this.#transport = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
-        port: process.env.SMPT_PORT,
-        //service:"gmail",
+        port: process.env.SMTP_PORT,
+       // service:"gmail",
         secure: false, // true for port 465, false for other ports
                         // secure =>comment out for gmail
         auth: {
           user: process.env.SMTP_USERNAME,
           pass: process.env.SMTP_PASSWORD,
         },
+
       });
+      if(process.env.SMTP_SERVICE==='gmail'){
+        config['service']='gmail'
+      }
       console.log(process.env.SMTP_PROVIDER);
       
     } catch (exception) {
