@@ -76,17 +76,8 @@ class userService {
     }catch(exception){
       // console.log(exception);
       
-      let msg={}
-      if (exception.code===11000){
-        const uniqueFailedKeys= Object.keys(exception.keyPattern)//return array->['email']
-        
-        uniqueFailedKeys.map((field)=>{
-          msg[field]=field + " should be unique"
-        })
-      }
-
       console.log("error while registering user in DB.");      
-      throw {status:400, details:msg, message:"validation error"};
+      throw exception;
     }
   }
 }

@@ -23,6 +23,19 @@ app.use((error, req, res, next) => {
     let statusCode = error.status || 500;
     let message = error.message || "server error..";
     let details = error.details || null;
+
+    //MONGODB UNIQUENESS ERROR
+    if (error.code===11000){
+      const uniqueFailedKeys= Object.keys(error.keyPattern)//return array->['email']
+       details={};
+      
+      uniqueFailedKeys.map((field)=>{
+        details[field]=field + " should be unique"
+      })
+      statusCode=400,message="validation failed"
+    }
+
+
   //multer error
   if (error instanceof multer.MulterError) {
     if (error.code === "LIMIT-FILE-SIZE") {
