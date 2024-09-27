@@ -1,5 +1,5 @@
 //database table related work
-//schema is property definition of data
+//schema is property ,definition of data
 const mongoose=require("mongoose");
 const { userrole, statustype } = require("../../config/constant.config");
 
@@ -39,12 +39,12 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:[...object.values(userrole)],
+        enum:[...Object.values(userrole)],
         default:userrole.CUSTOMER
     },
     status:{
         type:String,
-        enum:[...object.values(statustype)],
+        enum:[...Object.values(statustype)],
         default:statustype.INACTIVE
     },
     activationToken:String,
@@ -65,6 +65,6 @@ const userSchema=new mongoose.Schema({
 });
 
                         //model name must be singular//collection name default is plural of model name
-const usermodel=mongoose.model("User",userSchema)//.model("modelname","definnition","collection name")
+const Usermodel=mongoose.model("User",userSchema)//.model("modelname","definnition","collection name")
 
-module.exports=usermodel
+module.exports=Usermodel

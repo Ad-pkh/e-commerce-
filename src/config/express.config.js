@@ -1,4 +1,5 @@
 const express = require("express");
+require("./db.config")//db connection
 const router = require("./router.config");
 const multer = require("multer");
 const app = express();

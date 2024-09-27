@@ -20,7 +20,7 @@ class userService {
     data.password = bcrypt.hashSync(data.password, 10);
     //delete data.confirmpassword;
     data.token = randomstring(100);
-    data.status = "Inactive";
+    data.status = "inactive";
     data.activefor = new Date(Date.now() + 4 * 60 * 60 * 1000); //4 hrs in ms
     return data;
   };
