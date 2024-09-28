@@ -1,3 +1,4 @@
+const { statustype } = require("../../config/constant.config")
 const usersvc = require("../user/user.service")
 
 class AuthController{
@@ -21,6 +22,16 @@ class AuthController{
                 throw{status:422,message:"token expired!!"}
             }
 
+            user.activationToken=null
+            user.activateFor=null
+            user.status=statustype.ACTIVE
+            user.save()
+
+            res.json({
+                details:null,
+                message:" your account has been activated successfully. Please login to continue..",
+                meta:null
+            })
           
 
         }catch(exception){
