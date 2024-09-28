@@ -9,11 +9,12 @@ class usercontroller {
     try {
       const data = usersvc.transformUserCreate(req); //creatinguser
       await usersvc.registerUser(data); //insert in db
+      //console.log(data);
 
       const email = usersvc.sendactivationemail({
         email: data.email,
         name: data.name,
-        token: data.token,
+        activationToken: data.activationToken,
       }); //sending email
       
       res.json({

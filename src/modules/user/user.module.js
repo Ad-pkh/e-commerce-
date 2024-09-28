@@ -32,6 +32,11 @@ const userSchema=new mongoose.Schema({
         required:true,
         min:8
     },
+    phone:{
+        type:String,
+        min:8,
+        max:15
+    },
     address:{
         parmanent:addressSchema,
         temporary:addressSchema
@@ -48,7 +53,7 @@ const userSchema=new mongoose.Schema({
         default:statustype.INACTIVE
     },
     activationToken:String,
-    activateFor:String,
+    activateFor:Date,
     image:String,
     forgetToken:String,
     forgetFor:Date,
