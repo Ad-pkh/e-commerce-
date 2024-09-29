@@ -96,7 +96,8 @@ class AuthController {
               },
               token: token //login jwt token and  is always bearer
             },
-            message:"User logged in successfully"
+            message:"User logged in successfully",
+            meta:null
           });
 
         } else {
@@ -112,7 +113,19 @@ class AuthController {
     } catch (exception) {
       next(exception);
     }
-  };
+  }
+  getloggedinuser=(req,res,next)=>{
+    try{
+        console.log(req.authUser)
+       res.json({
+        result:req.authUser,
+        message:"Your Profile",
+        meta:null
+       })
+    }catch(exception){
+        next (exception)
+    }
+  }
 }
 
 const authcontroller = new AuthController();

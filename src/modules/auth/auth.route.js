@@ -4,6 +4,7 @@ const datavalidator = require('../../middlewares/validator.middleware')
 const userctrl = require('../user/user.controller')
 const { usercreateDTO } = require('../user/user.request')
 const authcontroller = require('./auth.controller')
+const logincheck = require('./auth.middleware')
 const { loginDTO } = require('./auth.request')
 
 const authrouter=require('express').Router()
@@ -13,5 +14,6 @@ authrouter.post("/register",setpath('user'),uploadFile().single(filefiltertype.I
 authrouter.get("/activate/:token",authcontroller.activateUser)
 authrouter.get("/resend-activationtoken/:token",authcontroller.resendActivationToken)
 authrouter.post("/login",datavalidator(loginDTO), authcontroller.userLogin) 
+authrouter.get("/me",logincheck,authcontroller.getloggedinuser)
 
-module.exports=authrouter
+module.exports=authrouter;
