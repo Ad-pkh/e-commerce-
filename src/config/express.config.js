@@ -6,8 +6,8 @@ const app = express();
 
 //body parser is an built in function
 //yedi raw bata json pathaune ho vane parser need to be loaded before loading route
-// app.use(express.json()) //parser
-// app.use(express.urlencoded)//for urlencoded
+ app.use(express.json()) //parser
+ app.use(express.urlencoded({ extended: true }))//for urlencoded
 
 app.use(router);
 

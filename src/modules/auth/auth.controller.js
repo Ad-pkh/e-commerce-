@@ -1,3 +1,4 @@
+const bcrypt=require('bcryptjs')
 const { statustype } = require("../../config/constant.config")
 const usersvc = require("../user/user.service")
 
@@ -28,7 +29,7 @@ class AuthController{
             user.save()
 
             res.json({
-                details:null,
+                result:null,
                 message:" your account has been activated successfully. Please login to continue..",
                 meta:null
             })
@@ -66,6 +67,25 @@ class AuthController{
             next(exception)
         }
 
+    }
+    userLogin=async(req,res,next)=>{
+        try{
+            const{email,password}=req.body;
+            const user= await usersvc.getSingleUserbyFilter({
+                email:email
+            })
+            if(bcrypt.compareSync(password,user.password)){
+                //if match
+                res.json({
+                    message:"credential matched"
+                })
+            }else{
+                throw{status:400,result:null,message:"Credentials not match.."}
+            }
+
+        }catch(exception){
+            next(exception);
+        }
     }
 }
 
