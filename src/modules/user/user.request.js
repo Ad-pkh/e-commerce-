@@ -3,6 +3,15 @@
 const joi = require("joi");
 
 //DataTransferObject
+
+// const addressjoiSchema = joi.object({
+//   province: joi.string().valid("koshi", "madhesh", "bagmati", "lumbini", "gandaki", "karnali", "sudurpashim").required(),
+//   district: joi.string().required(),
+//   localgovernment: joi.string().required(),
+//   wardno: joi.string().required(),
+//   village: joi.string().optional(),
+// });
+
 const usercreateDTO = joi.object({
   name: joi.string().regex(/^[a-zA-Z]+( [a-zA-Z]+)*$/).min(2).max(25).required().messages({
     "string.pattern.base": "Name can only contain letters and spaces between words."
@@ -17,12 +26,20 @@ const usercreateDTO = joi.object({
     "any.only":"password and confirmpassword must be same"
   }),
   phone: joi.string().min(8).max(15).optional(),
-  address: joi.string().max(30).empty(),
+  //address: joi.string().max(30).empty(),
   image:joi.string(),
   role:joi.string().regex(/^(seller|customer)$/).required().messages({
     "string.pattern.base":"role can be seller or customer"
-  })
+  }),
+
+    // address: joi.object({
+    //   permanent: addressjoiSchema.required(),
+    //   temporary: addressjoiSchema.optional(),
+    // }).required(),
+  
+  
 });
+
 
 module.exports = {
     usercreateDTO

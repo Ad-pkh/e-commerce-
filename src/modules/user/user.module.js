@@ -8,10 +8,10 @@ const addressSchema=new mongoose.Schema({
         type:String,
         enum:["koshi","madhesh","bagmati","lumbini","gandaki","karnali","sudurpashim"]
     },
-    district:String,
-    localgovernment:String,
-    wardno:String,
-    village:String
+    district:{type:String},
+    localgovernment:{type:String},
+    wardno:{type:String},
+    village:{type:String}
 })
 
                       //schema has 2 arg,{ property:definition},{}

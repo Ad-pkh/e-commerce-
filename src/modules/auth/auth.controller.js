@@ -116,7 +116,7 @@ class AuthController {
   }
   getloggedinuser=(req,res,next)=>{
     try{
-        console.log(req.authUser)
+        
        res.json({
         result:req.authUser,
         message:"Your Profile",
