@@ -121,8 +121,11 @@ class AuthController {
         result:req.authUser,
         message:"Your Profile",
         meta:null
+        
        })
+      console.log("profile fetched successfully of loggedin user")
     }catch(exception){
+      
         next (exception)
     }
   }

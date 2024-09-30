@@ -29,7 +29,7 @@ const logincheck=async(req,res,next)=>{
                 
                 
             }
-            console.log("profile fetched successfully of loggedin user")
+            
             next();
            
         }

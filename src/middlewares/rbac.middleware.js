@@ -15,7 +15,6 @@ const haspermission=(accessedBy)=>{
             next(exception)
         }
 
-        next();
     }
 }
 

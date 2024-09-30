@@ -12,7 +12,7 @@ const app = express();
 app.use(router);
 
 app.use((req, res, next) => {
-  next({ statusCode: 401, message: "route not defined" });
+  next({ statusCode: 401, message: "route not defined " });
 });
 
 //error handling (next with arg=error,i.e next({}) )
