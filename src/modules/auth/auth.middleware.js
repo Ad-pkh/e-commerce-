@@ -13,6 +13,10 @@ const logincheck=async(req,res,next)=>{
             token=token.split(" ").pop()//taking token fromm bearertoken
 
             const data=jwt.verify(token,process.env.JWT_SECRET)//verify jwt
+
+            if(data.hasOwnProperty('type')){//denied further access for refresh token
+                throw{status:403,message:"!!Access token required"}
+            }
             
             const user= await usersvc.getSingleUserbyFilter({//checking availability of user in realtime from db
                 _id:data.sub

@@ -16,5 +16,6 @@ authrouter.get("/activate/:token",authcontroller.activateUser)
 authrouter.get("/resend-activationtoken/:token",authcontroller.resendActivationToken)
 authrouter.post("/login",datavalidator(loginDTO), authcontroller.userLogin) 
 authrouter.get("/me",logincheck,haspermission(['seller','customer']), authcontroller.getloggedinuser)
+authrouter.get("/refreshToken", authcontroller.getRefreshToken)
 
 module.exports=authrouter;

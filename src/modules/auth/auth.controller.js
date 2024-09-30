@@ -86,6 +86,17 @@ class AuthController {
             //     algorithm://can be changed
             // }
           );
+            const refreshToken=jwt.sign(
+                {
+                  sub: user._id,
+                  type:"refresh"//added to distinguish from login token  
+                },
+                process.env.JWT_SECRET,
+                {
+                   expiresIn:"1 day"
+                }
+              )
+              
           res.json({
             result: {
               userdetails: {
@@ -94,7 +105,9 @@ class AuthController {
                 email: user.email,
                 role: user.role,
               },
-              token: token //login jwt token and  is always bearer
+              token: token, //login jwt token and  is always bearer
+              refreshToken:refreshToken
+              
             },
             message:"User logged in successfully",
             meta:null
@@ -127,6 +140,58 @@ class AuthController {
     }catch(exception){
       
         next (exception)
+    }
+  }
+
+  getRefreshToken=async(req,res,next)=>{
+    try{
+      //same as logincheck
+      let token=req.headers['authorization']||null
+      if(!token){
+          throw{status:401,message:"!!!!Token required!!!!"}
+      }else{
+          
+          token=token.split(" ").pop()//taking token from bearertoken
+
+          const {sub,type}=jwt.verify(token,process.env.JWT_SECRET)//verify jwt
+          
+          console.log({type});
+          if(!type || type===!'refresh'){
+            console.log("hello");
+            
+            throw{status:401,message:"Refresh token required.."}
+          }
+ 
+           await usersvc.getSingleUserbyFilter({//checking availability of user in realtime from db
+              _id:sub
+          })
+          const accesstoken = jwt.sign(
+            {
+              sub:sub,
+            },process.env.JWT_SECRET    
+          );
+            
+          const refreshToken=jwt.sign(
+            {
+              sub:sub,//sub= id of db
+              type:"refresh"//added to distinguish from login token  
+            },
+            process.env.JWT_SECRET,
+            {
+               expiresIn:"1 day"
+            }
+          )
+          res.json({
+            result:{
+              Refreshed_token:accesstoken,
+              //refreshToken:refreshToken
+            },
+            message:"token refreshed",
+            meta:null
+          })
+      }
+    }catch(exception){
+      next(exception)
     }
   }
 }
