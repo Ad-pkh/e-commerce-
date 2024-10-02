@@ -7,7 +7,8 @@ const filefiltertype={
 
 const userrole={
     CUSTOMER:"customer",
-    SELLER:"seller"
+    SELLER:"seller",
+    ADMIN:"admin"
 }
 
 const statustype={
