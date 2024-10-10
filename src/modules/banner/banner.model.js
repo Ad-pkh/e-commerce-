@@ -1,6 +1,6 @@
-const moongoose=require("moongoose");
+const mongoose=require("mongoose");
 const { statustype } = require("../../config/constant.config");
-const bannerschema= new moongoose.Schema({
+const bannerschema= new mongoose.Schema({
     title:{
         type:String,
         required:true,
@@ -18,20 +18,20 @@ const bannerschema= new moongoose.Schema({
     status :{
         type:String,
         required:true,
-        Enumerator:[statustype.ACTIVE,statustype.INACTIVE],
+        enum:[statustype.ACTIVE,statustype.INACTIVE],
         default:statustype.INACTIVE
 
     },
     createdBy :{
-     type:moongoose.Types.ObjectId,
+     type:mongoose.Types.ObjectId,
      ref:"User",//from User table
      default:null
     }
 },{
-    timeStamp:true,
+    timestamps:true,
     autoIndex:true,
     autoCreate:true
 })
 
-const bannermodel= moongoose.Model("banner",bannerschema)
+const bannermodel= mongoose.model("Banner",bannerschema)
 module.exports=bannermodel;
