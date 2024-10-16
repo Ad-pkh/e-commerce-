@@ -9,7 +9,7 @@ const bannerController = require("./banner.controller")
 
 router.route("/")
     .post(logincheck,haspermission("admin"),setpath("banner"),uploadFile().single(filefiltertype.IMAGE),datavalidator(bannercreateDTO),bannerController.create)
-    .get()
+    .get(logincheck,haspermission("admin"),bannerController.details)
     .put()
     .delete()
 

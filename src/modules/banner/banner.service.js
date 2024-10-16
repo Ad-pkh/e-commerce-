@@ -10,5 +10,17 @@ class bannerservice{
             throw exception;
         }
     }
+    listdata= async({skip=0,filter={}})=>{
+        try{
+            const count=await bannermodel.countDocuments(filter);
+            const data=await bannermodel.find(filter)
+                                    .populate("createdBy",["_id","name","email","role"])
+                                    .sort({_id:"desc"})
+                                    .skip(skip)
+            return {count,data}
+        }catch(exception){
+            throw exception;
+        }
+    }
 }
 module.exports=new bannerservice()
