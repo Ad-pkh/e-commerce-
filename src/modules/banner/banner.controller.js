@@ -51,6 +51,7 @@ class bannerController{
             }
             const {count,data}=await bannerService.listdata({
                 skip:skip,
+                limit:limit,
                 filter:filter
             })
             
