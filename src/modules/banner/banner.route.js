@@ -4,17 +4,16 @@ const haspermission=require("../../middlewares/rbac.middleware")
 const {setpath, uploadFile}=require("../../middlewares/uploader.middleware")
 const datavalidator=require("../../middlewares/validator.middleware")
 const { filefiltertype } = require("../../config/constant.config")
-const { bannercreateDTO } = require("./banner.request")
+const { bannercreateDTO, bannerupdateDTO } = require("./banner.request")
 const bannerController = require("./banner.controller")
 
 router.route("/")
     .post(logincheck,haspermission("admin"),setpath("banner"),uploadFile().single(filefiltertype.IMAGE),datavalidator(bannercreateDTO),bannerController.create)
     .get(logincheck,haspermission("admin"),bannerController.details)
-    .put()
-    .delete()
+   
 
 router.route("/:id")
         .get(logincheck,haspermission("admin"),bannerController.show)
-
+        .patch(logincheck,haspermission("admin"),setpath("banner"),uploadFile().single(filefiltertype.IMAGE),datavalidator(bannerupdateDTO),bannerController.update)
 
     module.exports=router;

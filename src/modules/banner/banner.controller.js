@@ -37,6 +37,7 @@ class bannerController{
         }
 
     }
+
     details=async(req,res,next)=>{
         try{
             const page=+req.query.page||1
@@ -73,6 +74,7 @@ class bannerController{
         }
 
     }
+
     show=async(req,res,next)=>{
         try{
             const id =req.params.id;
@@ -96,9 +98,41 @@ class bannerController{
         }
 
     }
+
     update=async(req,res,next)=>{
+        try{
+            const id =req.params.id;
+            if(!id){
+                next({status:400,message:"Id is required"})
+            }
+            const bannerDetails=await bannerService.getDetailbyfilter({
+                _id:id//filter of req data
+            })
+
+            if(!bannerDetails){
+                throw({status:404,message:"Banner doesnot exist."})
+            }
+
+            const data=req.body
+            if(req.image){
+                data.image= await uploadImage("./public/uploads/banner/"+req.file.filename);
+                filedelete("./public/uploads/banner/"+req.file.filename);
+               
+            }
+            const bannerUpdate=await bannerService.bannerUpdate(id,data)
+            
+            res.json({
+                result:bannerUpdate,
+                message:"Banner updated successfully",
+                meta:null
+            })
+
+        }catch(exception){
+            next (exception)
+        }
 
     }
+
     delete=async(req,res,next)=>{
 
     }

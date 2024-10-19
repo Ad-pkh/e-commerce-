@@ -33,5 +33,15 @@ class bannerservice{
         }
 
     }
+
+    bannerUpdate=async(id,data)=>{
+        try{                                            //(id,{$set:data},{new:true})args
+            const update=bannermodel.findByIdAndUpdate(id,{$set:data},{new:true})//without 3rrd arg it returns data before update and with 3rd arg it returns data after update
+            return update;
+            
+        }catch(exception){
+            throw exception;
+        }
+    }
 }
 module.exports=new bannerservice()
