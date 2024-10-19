@@ -1,5 +1,6 @@
 
 const { uploadImage, deleteImage } = require("../../config/cloudinary.config");
+const { statustype } = require("../../config/constant.config");
 const { filedelete } = require("../../utilities/helper");
 const bannermodel = require("./banner.model");
 const bannerService = require("./banner.service");
@@ -162,6 +163,25 @@ class bannerController {
             next(exception)
         }
 
+    }
+    homepagebanner=async(req,res,next)=>{
+        try{
+            const list=await bannerService.listdata({
+                limit:5,
+               filter:{
+                status:statustype.ACTIVE
+               }
+            })
+
+            res.json({
+                result:list,
+                message:"homepage Banner",
+                meta:null
+            })
+
+        }catch(exception){
+            next(exception)
+        }
     }
 }
 

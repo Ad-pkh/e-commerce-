@@ -7,6 +7,9 @@ const { filefiltertype } = require("../../config/constant.config")
 const { bannercreateDTO, bannerupdateDTO } = require("./banner.request")
 const bannerController = require("./banner.controller")
 
+//public route
+router.get("/",bannerController.homepagebanner)
+
 router.route("/")
     .post(logincheck,haspermission("admin"),setpath("banner"),uploadFile().single(filefiltertype.IMAGE),datavalidator(bannercreateDTO),bannerController.create)
     .get(logincheck,haspermission("admin"),bannerController.details)
