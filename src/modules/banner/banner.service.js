@@ -36,10 +36,24 @@ class bannerservice{
 
     bannerUpdate=async(id,data)=>{
         try{                                            //(id,{$set:data},{new:true})args
-            const update=bannermodel.findByIdAndUpdate(id,{$set:data},{new:true})//without 3rrd arg it returns data before update and with 3rd arg it returns data after update
+            const update=await bannermodel.findByIdAndUpdate(id,{$set:data},{new:true})//without 3rrd arg it returns data before update and with 3rd arg it returns data after update
             return update;
-            
+
         }catch(exception){
+            throw exception;
+        }
+    }
+
+    bannerDelete=async(id)=>{
+        try{
+            const bannerdelete=await bannermodel.deleteOne({_id:id});//or findbyidanddelete(id)
+            if(!bannerdelete){
+                throw({status:404,message:"Banner Not found"})
+            }
+            
+            return bannerdelete;
+        }catch(exception){
+
             throw exception;
         }
     }

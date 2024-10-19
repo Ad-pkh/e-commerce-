@@ -15,5 +15,5 @@ router.route("/")
 router.route("/:id")
         .get(logincheck,haspermission("admin"),bannerController.show)
         .patch(logincheck,haspermission("admin"),setpath("banner"),uploadFile().single(filefiltertype.IMAGE),datavalidator(bannerupdateDTO),bannerController.update)
-
+        .delete(logincheck,haspermission('admin'),bannerController.delete)
     module.exports=router;
