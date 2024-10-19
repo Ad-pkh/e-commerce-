@@ -169,7 +169,9 @@ class bannerController {
             const list=await bannerService.listdata({
                 limit:5,
                filter:{
-                status:statustype.ACTIVE
+                status:statustype.ACTIVE,
+                startDate:{$lte:new Date()},
+                endDate:{$gte:new Date()}
                }
             })
 

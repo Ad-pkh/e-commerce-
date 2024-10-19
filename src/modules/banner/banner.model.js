@@ -22,6 +22,8 @@ const bannerschema= new mongoose.Schema({
         default:statustype.INACTIVE
 
     },
+    startDate:Date,
+    endDate:Date,
     createdBy :{
      type:mongoose.Types.ObjectId,
      ref:"User",//from User table
