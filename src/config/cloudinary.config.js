@@ -32,11 +32,28 @@ const uploadImage = async (imagePath) => {
       // Upload the image
       const result = await cloudinary.uploader.upload(imagePath, options);
       //console.log(result);
-      return result.url;
-    } catch (error) {
-      console.error(error);
+
+       // Extract public_id and url from the result
+       const { public_id, url } = result;
+    
+    // Return an object with both values
+     return { public_id, url };
+
+    } catch (exception) {
+      console.log('error while uploading in clouud ',exception);
       throw(exception);
     }
 };
 
-module.exports={uploadImage};
+const deleteImage=async(public_id)=>{
+  try {
+    const result=await cloudinary.uploader.destroy(public_id, resource_type= 'image')
+    console.log("banner deleted from cloud",result);
+    
+  } catch (exception) {
+    console.log("error while deleting from cloud",exception);
+    throw(exception);
+  }
+}
+
+module.exports={uploadImage,deleteImage};

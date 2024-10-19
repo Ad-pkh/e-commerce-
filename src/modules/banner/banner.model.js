@@ -26,6 +26,10 @@ const bannerschema= new mongoose.Schema({
      type:mongoose.Types.ObjectId,
      ref:"User",//from User table
      default:null
+    },
+    public_id:{//for cloudinary
+        type:String,
+        default:null
     }
 },{
     timestamps:true,

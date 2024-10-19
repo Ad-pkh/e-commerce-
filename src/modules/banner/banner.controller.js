@@ -1,5 +1,5 @@
 
-const { uploadImage } = require("../../config/cloudinary.config");
+const { uploadImage, deleteImage } = require("../../config/cloudinary.config");
 const { filedelete } = require("../../utilities/helper");
 const bannermodel = require("./banner.model");
 const bannerService = require("./banner.service");
@@ -10,28 +10,28 @@ class bannerController {
         try {
 
             const data = req.body
-            data.image = await uploadImage("./public/uploads/banner/" + req.file.filename);//gives image url
+            //console.log(data);
+            
+           const imageData  = await uploadImage("./public/uploads/banner/" + req.file.filename);//gives image url and public id
+           data.image = imageData.url;//data.image ma gayera bind hunxa url
+           data.public_id=imageData.public_id;
+           
             //delete img from local 
             filedelete("./public/uploads/banner/" + req.file.filename);
             data.createdBy = req.authUser._id;
 
             const banner = await bannerService.bannercreate(data)// banner creation
             res.json({
-                result: banner,
+
+                result:banner,
                 message: "Banner Created successfully",
                 meta: null
             })
-            console.log(data.image);
-            //    bannermodel({
-            //     title:req.title,
-            //     link:imageupload,
-
-
-            //    })
-
+            //console.log(data.image);
+        
 
         } catch (exception) {
-            console.log(exception);
+            console.log("exception banner create!!!!!",exception);
 
             next(exception)
         }
@@ -136,19 +136,21 @@ class bannerController {
     delete = async (req, res, next) => {
 
         try {
-            const id = req.params.id;
-            if (!id) {
+            const {id,public_id} = req.params;
+            if (!id || !public_id) {
                 next({ status: 400, message: "Id is required" })
             }
             const bannerDetails = await bannerService.getDetailbyfilter({
-                _id: id//filter of req data
+                _id: id,//filter of req data
+                public_id:public_id
             })
 
             if (!bannerDetails) {
                 throw ({ status: 404, message: "Banner doesnot exist." })
             }
-            const bannerdelete = await bannerService.bannerDelete(id);
-            //delete from cloud
+            const bannerdelete = await bannerService.bannerDelete(id);//delete from database
+           
+            const bannerdeletecloud=await deleteImage(public_id) //delete from cloudinary
 
             res.json({
                 result:bannerdelete,
