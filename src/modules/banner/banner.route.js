@@ -13,4 +13,8 @@ router.route("/")
     .put()
     .delete()
 
+router.route("/:id")
+        .get(logincheck,haspermission("admin"),bannerController.show)
+
+
     module.exports=router;

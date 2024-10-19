@@ -23,5 +23,15 @@ class bannerservice{
             throw exception;
         }
     }
+    getDetailbyfilter=async(filter)=>{
+        try{
+            const bannerDetail=await bannermodel.findOne(filter)
+                                        .populate("createdBy",["_id","name","email","role"])
+            return bannerDetail;
+        }catch(exception){
+            throw exception;
+        }
+
+    }
 }
 module.exports=new bannerservice()

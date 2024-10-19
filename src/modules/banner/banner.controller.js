@@ -74,6 +74,26 @@ class bannerController{
 
     }
     show=async(req,res,next)=>{
+        try{
+            const id =req.params.id;
+            if(!id){
+                next({status:400,message:"Id is required"})
+            }
+            const bannerDetails=await bannerService.getDetailbyfilter({
+                _id:id//filter of req data
+            })
+
+            if(!bannerDetails){
+                throw({status:404,message:"Banner doesnot exist."})
+            }
+            res.json({
+                result:bannerDetails,
+                message:"Banner Details.",
+                meta:null
+            })
+        }catch(exception){
+            next(exception)
+        }
 
     }
     update=async(req,res,next)=>{
