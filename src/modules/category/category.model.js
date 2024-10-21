@@ -42,7 +42,7 @@ const categoryschema= new mongoose.Schema({
     brands:[{   //Array
        type:mongoose.Types.ObjectId,
         ref:"Brand",
-        default:null
+        default:[]
     }]
 },{
     timestamps:true,
