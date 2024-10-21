@@ -48,7 +48,7 @@ const uploadImage = async (imagePath) => {
 const deleteImage=async(public_id)=>{
   try {
     const result=await cloudinary.uploader.destroy(public_id, resource_type= 'image')
-    console.log("banner deleted from cloud",result);
+    console.log("Assets is deleted from cloud",result);
     
   } catch (exception) {
     console.log("error while deleting from cloud",exception);
