@@ -39,7 +39,7 @@ const categoryschema= new mongoose.Schema({
         ref:"Category",
         default:null
     },
-    brands:[{   //Array
+    brand:[{   //Array
        type:mongoose.Types.ObjectId,
         ref:"Brand",
         default:[]

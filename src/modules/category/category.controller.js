@@ -18,6 +18,13 @@ class categoryController {
            //slug
             data.slug=slugify(data.title,{lower:true});
 
+            //brand id
+            if(!data.brand){
+                throw{status:400,message:"brand is required"}
+            }
+            const brand_id=await categoryService.brandfilter(data.brand);//return brand id
+            data.brand=brand_id;
+
             //delete img from local 
             filedelete("./public/uploads/category/" + req.file.filename);
             data.createdBy = req.authUser._id;
@@ -121,6 +128,12 @@ class categoryController {
                 filedelete("./public/uploads/category/" + req.file.filename);
 
             }
+            if(!data.brand){
+                throw{status:400,message:"brand is required"}
+            }
+            const brand_id=await categoryService.brandfilter(data.brand);//return brand id
+            data.brand=brand_id;
+
             const categoryUpdate = await categoryService.categoryUpdate(id, data)
 
             res.json({
