@@ -1,4 +1,4 @@
-const slugify=require('slugify')
+const slugify = require('slugify')
 const { uploadImage, deleteImage } = require("../../config/cloudinary.config");
 const { filedelete } = require("../../utilities/helper");
 const categorymodel = require("./category.model");
@@ -11,36 +11,45 @@ class categoryController {
 
             const data = req.body
             //console.log(data);
-            
-           const imageData  = await uploadImage("./public/uploads/category/" + req.file.filename);//gives image url and public id
-           data.image = imageData.url;//data.image ma gayera bind hunxa url
-           data.public_id=imageData.public_id;
-           //slug
-            data.slug=slugify(data.title,{lower:true});
 
+            //slug
+            data.slug = slugify(data.title, { lower: true });
+            
+            //parent_id
+            let parent_id=data.parent_id||null
+            
+            const parent=await categoryService.rootfilter(parent_id)
+            data.parent_id=parent;
+            
             //brand id
-            if(!data.brand){
-                throw{status:400,message:"brand is required"}
+            if (!data.brand) {
+                throw { status: 400, message: "brand is required" }
             }
-            const brand_id=await categoryService.brandfilter(data.brand);//return brand id
-            data.brand=brand_id;
+            const brand_id = await categoryService.brandfilter(data.brand);//return brand id
+            data.brand = brand_id;
+
+
+            const imageData = await uploadImage("./public/uploads/category/" + req.file.filename);//gives image url and public id
+            data.image = imageData.url;//data.image ma gayera bind hunxa url
+            data.public_id = imageData.public_id;
 
             //delete img from local 
             filedelete("./public/uploads/category/" + req.file.filename);
+
             data.createdBy = req.authUser._id;
 
             const category = await categoryService.categorycreate(data)// category creation
             res.json({
 
-                result:category,
+                result: category,
                 message: "Category Created successfully",
                 meta: null
             })
             //console.log(data.image);
-        
+
 
         } catch (exception) {
-            console.log("exception category create!!!!!",exception);
+            console.log("exception category create!!!!!", exception);
 
             next(exception)
         }
@@ -128,11 +137,11 @@ class categoryController {
                 filedelete("./public/uploads/category/" + req.file.filename);
 
             }
-            if(!data.brand){
-                throw{status:400,message:"brand is required"}
+            if (!data.brand) {
+                throw { status: 400, message: "brand is required" }
             }
-            const brand_id=await categoryService.brandfilter(data.brand);//return brand id
-            data.brand=brand_id;
+            const brand_id = await categoryService.brandfilter(data.brand);//return brand id
+            data.brand = brand_id;
 
             const categoryUpdate = await categoryService.categoryUpdate(id, data)
 
@@ -151,26 +160,26 @@ class categoryController {
     delete = async (req, res, next) => {
 
         try {
-            const {id,public_id} = req.params;
+            const { id, public_id } = req.params;
             if (!id || !public_id) {
                 next({ status: 400, message: "Id is required" })
             }
             const categoryDetails = await categoryService.getDetailbyfilter({
                 _id: id,//filter of req data
-                public_id:public_id
+                public_id: public_id
             })
 
             if (!categoryDetails) {
                 throw ({ status: 404, message: "Category doesnot exist." })
             }
             const categorydelete = await categoryService.categoryDelete(id);//delete from database
-           
-            const categorydeletecloud=await deleteImage(public_id) //delete from cloudinary
+
+            const categorydeletecloud = await deleteImage(public_id) //delete from cloudinary
 
             res.json({
-                result:categorydelete,
-                message:"Category deleted successfully",
-                meta:null
+                result: categorydelete,
+                message: "Category deleted successfully",
+                meta: null
             })
 
         } catch (exception) {
