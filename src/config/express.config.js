@@ -1,8 +1,11 @@
 const express = require("express");
+const cors= require("cors");
 require("./db.config")//db connection
 const router = require("./router.config");
 const multer = require("multer");
 const app = express();
+
+app.use(cors());// CORS enabled for all domain
 
 //body parser is an built in function
 //yedi raw bata json pathaune ho vane parser need to be loaded before loading route
