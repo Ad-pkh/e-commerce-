@@ -26,7 +26,7 @@ const usercreateDTO = joi.object({
     "any.only":"password and confirmpassword must be same"
   }),
   phone: joi.string().min(8).max(15).optional(),
-  //address: joi.string().max(30).empty(),
+  address: joi.string().max(30).empty(),
   image:joi.string(),
   role:joi.string().regex(/^(seller|customer)$/).required().messages({
     "string.pattern.base":"role can be seller or customer"
