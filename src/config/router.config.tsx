@@ -9,6 +9,7 @@ import { Login } from "../pages/auth/login/login.page";
 import Allproduct from "../pages/products/products";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import UserActivation from "../pages/auth/activation/activateuser.page";
 const RouterConfig=()=>{
     return(<>
     <ToastContainer/>
@@ -16,7 +17,8 @@ const RouterConfig=()=>{
             <Routes>
                 <Route path="/" element={<HomePageLayout/>}>
                     <Route index element={<LandingPage/>}   />
-                    <Route path="register" element={<RegisterPage/>} />
+                    <Route path="register" element={<RegisterPage />} />
+                    <Route path="activate/:token" element={<UserActivation/>}></Route>
                     <Route path="login" element={<Login/>}/>
                     <Route path="category/:slug" element={<CategoryDetail />}   />
                     <Route path="products" element={<Allproduct/>}   />

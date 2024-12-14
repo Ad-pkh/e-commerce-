@@ -1,50 +1,58 @@
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import RegisterImage from "../../../assets/registratrion image.png";
 import { InputLabel, RoleSelectComponent, TextAreaComponent, TextInputComponent } from "../../../components/common/form/input.component";
 import authSvc from "./auth.service";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import LoadingComponent from "../../../components/common/loading/loading.component";
 
 
 const RegisterPage = () => {
-    const registerDTO=Yup.object({
-        name:Yup.string().min(2).max(25).required(),
-        email:Yup.string().email().required(),
-        password:Yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/ ,
+    const registerDTO = Yup.object({
+        name: Yup.string().min(2).max(25).required(),
+        email: Yup.string().email().required(),
+        password: Yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
             "Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one number, and one special character").required(),
-        confirmpassword:Yup.string().oneOf([Yup.ref('password')],"Password and confirm Password must match"),
-        role:Yup.string().matches(/^(customer|seller)$/).default("customer"),
-        phone:Yup.string(),
-        address:Yup.string(),
-        image:Yup.mixed()
+        confirmpassword: Yup.string().oneOf([Yup.ref('password')], "Password and confirm Password must match"),
+        role: Yup.string().matches(/^(customer|seller)$/).default("customer"),
+        phone: Yup.string(),
+        address: Yup.string(),
+        image: Yup.mixed()
     })
-    const {setValue,setError, control, handleSubmit, formState: { errors } } = useForm({
-        resolver:yupResolver(registerDTO)
+
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);//custom hook to prevent continuous API call
+    const { setValue, setError, control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(registerDTO)
     });
-    const submitForm = async(data: any) => {
-        try{
+    const submitForm = async (data: any) => {
+        try {
+            setLoading(true);
             // API CALL
-            const response :any= await authSvc.postRequest('/auth/register',data,{file:true})
-            toast.success(response.message);
-       
-    }catch(exception: any){
-        if(+exception.status===400){
-             Object.keys(exception.data.details).map((field:any)=>{//backend error message display
-               setError(field,{message:exception.data.details[field]})
-            })
-        } 
-        
-        toast.error(exception.data.message);
-    }
-    
-    
-        
+            await authSvc.postRequest('/auth/register', data, { file: true })
+            toast.success("Your account has been created successfully,Verify Email for login");//need to build logic when backend is off
+            navigate("/");
+
+        } catch (exception: any) {
+            if (+exception.status === 400) {
+                Object.keys(exception.data.details).map((field: any) => {//backend error message display
+                    setError(field, { message: exception.data.details[field] })
+                })
+            }
+            toast.error(exception.data.message);
+        } finally {
+            setLoading(false);
+        }
+
+
+
     }
     return (<>
-    
+
         <section className="bg-teal-200">
             <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
                 <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
@@ -94,7 +102,7 @@ const RegisterPage = () => {
 
 
                             <div className="col-span-6">
-                            <InputLabel htmlFor="email">Email</InputLabel>
+                                <InputLabel htmlFor="email">Email</InputLabel>
 
                                 <TextInputComponent
                                     name="email"
@@ -104,7 +112,7 @@ const RegisterPage = () => {
                                 />
                             </div>
                             <div className="col-span-6">
-                            <InputLabel htmlFor="phone">Phone</InputLabel>
+                                <InputLabel htmlFor="phone">Phone</InputLabel>
 
                                 <TextInputComponent
                                     name="phone"
@@ -115,60 +123,60 @@ const RegisterPage = () => {
                             </div>
 
                             <div className="col-span-6 sm:col-span-3">
-                            <InputLabel htmlFor="password">Password</InputLabel>  
-                               
-                               <TextInputComponent 
-                                 name="password"
-                                 type="password"
-                                 errMsg={errors?.password?.message as string}
-                                 required={true}
-                                 control={control}
+                                <InputLabel htmlFor="password">Password</InputLabel>
+
+                                <TextInputComponent
+                                    name="password"
+                                    type="password"
+                                    errMsg={errors?.password?.message as string}
+                                    required={true}
+                                    control={control}
                                 />
 
                             </div>
 
                             <div className="col-span-6 sm:col-span-3">
-                            <InputLabel htmlFor="confirmpassword">Confirm Password</InputLabel>
+                                <InputLabel htmlFor="confirmpassword">Confirm Password</InputLabel>
 
-                                <TextInputComponent 
-                                 name="confirmpassword"
-                                 type="password"
-                                 errMsg={errors?.confirmpassword?.message as string}
-                                 required={true}
-                                 control={control}
+                                <TextInputComponent
+                                    name="confirmpassword"
+                                    type="password"
+                                    errMsg={errors?.confirmpassword?.message as string}
+                                    required={true}
+                                    control={control}
                                 />
                             </div>
                             <div className="col-span-6 ">
-                            <InputLabel htmlFor="address">Address</InputLabel>
+                                <InputLabel htmlFor="address">Address</InputLabel>
 
-                               <TextAreaComponent 
-                               name="address"
-                               errMsg={errors?.address?.message as string}
-                               required={true}
-                               control={control}
-                               />
+                                <TextAreaComponent
+                                    name="address"
+                                    errMsg={errors?.address?.message as string}
+                                    required={true}
+                                    control={control}
+                                />
 
                             </div>
                             <div className="col-span-6">
-                            <InputLabel htmlFor="role">Role</InputLabel>                                    <RoleSelectComponent 
+                                <InputLabel htmlFor="role">Role</InputLabel>                                    <RoleSelectComponent
                                     name="role"
                                     errMsg={errors?.role?.message as string}
-                                    
+
                                     control={control}
-                                    />
-                                
+                                />
+
                             </div>
 
                             <div className="col-span-6">
-                            <InputLabel htmlFor="image">Image</InputLabel>
-                            
-                            <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="Role" 
-                                type="file"
-                                onChange={(e:any)=>{
-                                    const image=e.target.files['0'];
-                                    setValue('image',image);
-                                    
-                                }}
+                                <InputLabel htmlFor="image">Image</InputLabel>
+
+                                <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="Role"
+                                    type="file"
+                                    onChange={(e: any) => {
+                                        const image = e.target.files['0'];
+                                        setValue('image', image);
+
+                                    }}
                                 />
 
                             </div>
@@ -185,8 +193,10 @@ const RegisterPage = () => {
                             <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                 <button
                                     className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                                    disabled={loading}
                                 >
-                                    Create an account
+                                    {loading?<LoadingComponent />:'Create an account'}
+                                    
                                 </button>
 
                                 <p className="mt-4 text-sm text-gray-800 sm:mt-0">

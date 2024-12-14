@@ -15,22 +15,29 @@ abstract class HttpService{
                 "Content-Type":"multipart/form-data"
             }
         }
+        //todo :paramss set
     }
 
-    postRequest =async(url:string, data:any={},config:any=null)=>{
-        try {
-            this.setHeaders(config);
+    postRequest = async (url: string, data: any = {}, config: any = null) => {
+        this.setHeaders(config);
 
-            const response=await axiosInstance.post(url,data,{
-                headers:{...this.headers}
-            })
-           
-            return response;
+        const response = await axiosInstance.post(url, data, {
+            headers: { ...this.headers },
+        });
+
+        return response;
+    };
+
+    getRequest = async (url: string, config: any = null) => {
+        this.setHeaders(config);
+        
+        const response = await axiosInstance.get(url, {
             
-        } catch (exception) {
-            throw exception;
-        }
-    }
+            headers: { ...this.headers },
+        });
+
+        return response;
+    };
 }
 
 export default HttpService;
